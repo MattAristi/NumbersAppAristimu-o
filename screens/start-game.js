@@ -2,6 +2,7 @@ import { Button, Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } fr
 
 import Card from "../components/card";
 import Input from '../components/input'
+import NumberContainer from "../components/number-container";
 import React  from "react";
 import {colors} from '../constants/colors';
 import { useState } from "react";
@@ -23,12 +24,11 @@ const styles= StyleSheet.create ({
     
     inputContainer: {
         width:'80%',
-        height:120,
+        height:200,
         justifyContent: "center",
         alignItems:"center",
-        flexGrow: 0.4,
         marginHorizontal: 10,
-        marginVertical: 10,
+        marginVertical: 5,
     
 
     },
@@ -36,16 +36,15 @@ const styles= StyleSheet.create ({
     textLabel: {
         width: '100%',
         textAlign: "center",
-        marginVertical: 20,
+        marginVertical: 10,
         color: colors.text,
         fontSize: 16,
     },
    
     textInput: {
         width: '80%',
-        minHeight:25,
         textAlign: "center",
-        marginVertical: 25,
+        marginVertical: 10,
         color: colors.text,
         borderBottomColor: colors.primary,
         borderBottomWidth: 2,
@@ -57,20 +56,64 @@ const styles= StyleSheet.create ({
         flexDirection: 'row',
         width: '80%',
         justifyContent: "space-around",
-        marginTop: 15,
+        marginTop: 10,
         
     },
+    summaryContainer: {
+        width: '70%',
+        marginHorizontal:5,
+        marginTop:5,
+        paddingVertical: 20,
+        marginVertical: 15,
+        justifyContent:"center",
+        alignItems:"center",
+    },
+    summaryText: {
+        fontSize:18,
+        textAlign: "center",
+
+
+    },
+    
    
 })
 
 
 const StartGameScreen = () => {
+    const [confirmed, setConfirmed]=useState(false)
+    const [selectedNumber, setSelectedNumber]= useState(0)
     const [number, setNumber]= useState('')
 
+    const onReset = () => {
+        setNumber('')
+        setSelectedNumber('')
+        setConfirmed(false)
+        Keyboard.dismiss()
+    }
 
     const onHandleChangeText = (text) => {
         setNumber(text.replace(/[^0-9]/g, ''))
     }
+
+    const onConfirm= () => {
+        const chosenNumber = parseInt(number, 10)
+        if (isNaN(chosenNumber) || chosenNumber<=0 || chosenNumber>99) return;
+        setConfirmed(true)
+        setSelectedNumber(chosenNumber)
+        setNumber('')
+    }
+
+    const confirmedOutput = () => confirmed && (
+        <Card style={styles.summaryContainer}>
+            <Text style= {styles.summaryText}>Chosen</Text>
+            <NumberContainer>{selectedNumber}</NumberContainer>
+            <Button
+                title="Syart game"
+                onPress={() => null}
+                color={colors.primary}
+            />
+        </Card>
+    )
     return(
         <TouchableWithoutFeedback onPress={()=> Keyboard.dismiss}>
             <View style={styles.container}>
@@ -89,10 +132,11 @@ const StartGameScreen = () => {
                     />
                 
                     <View style= {styles.buttonContainer}>
-                        <Button title= 'Limpiar' onPress={() => null} color= {colors.secundary}/>
-                        <Button title= 'Confirmar' onPress={() => null} color= {colors.primary}/>
+                        <Button title= 'Limpiar' onPress={onReset} color= {colors.secundary}/>
+                        <Button title= 'Confirmar' onPress={onConfirm} color= {colors.primary}/>
                     </View>
                 </Card>
+                {confirmedOutput()}
             </View>
         </TouchableWithoutFeedback>
     )
