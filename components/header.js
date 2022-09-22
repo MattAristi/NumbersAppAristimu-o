@@ -14,7 +14,7 @@ const styles= StyleSheet.create ({
     title: {
         fontSize: 22,
         color: colors.white,
-        fontWeight: 'bold',
+        fontFamily:'oswaldBold'
     },
 })
 const Header = ({title}) => {

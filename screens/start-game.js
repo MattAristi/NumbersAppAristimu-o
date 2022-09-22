@@ -11,14 +11,14 @@ const styles= StyleSheet.create ({
     container: {
         flex: 1,
         alignItems: 'center',
-
+        fontFamily:'oswaldBold',
         marginVertical: 10,
     },
 
     title: {
         fontSize: 16,
         color: colors.black,
-        fontWeight: 'bold',
+        fontFamily:'oswaldBold',
         marginVertical: 15,
     },
     
@@ -29,6 +29,7 @@ const styles= StyleSheet.create ({
         alignItems:"center",
         marginHorizontal: 10,
         marginVertical: 5,
+        fontFamily:'oswaldRegular',
     
 
     },
@@ -39,6 +40,7 @@ const styles= StyleSheet.create ({
         marginVertical: 10,
         color: colors.text,
         fontSize: 16,
+        fontFamily:'oswaldBold',
     },
    
     textInput: {
@@ -49,6 +51,8 @@ const styles= StyleSheet.create ({
         borderBottomColor: colors.primary,
         borderBottomWidth: 2,
         fontSize: 22,
+        fontFamily:'oswaldRegular',
+        
         
     },
     buttonContainer: {
@@ -57,6 +61,7 @@ const styles= StyleSheet.create ({
         width: '80%',
         justifyContent: "space-around",
         marginTop: 10,
+        fontFamily:'oswaldBold',
         
     },
     summaryContainer: {
@@ -67,10 +72,12 @@ const styles= StyleSheet.create ({
         marginVertical: 15,
         justifyContent:"center",
         alignItems:"center",
+        fontFamily:'oswaldRegular',
     },
     summaryText: {
         fontSize:18,
         textAlign: "center",
+        fontFamily:'oswaldBold',
 
 
     },
@@ -79,7 +86,7 @@ const styles= StyleSheet.create ({
 })
 
 
-const StartGameScreen = () => {
+const StartGameScreen = ({onStartGame}) => {
     const [confirmed, setConfirmed]=useState(false)
     const [selectedNumber, setSelectedNumber]= useState(0)
     const [number, setNumber]= useState('')
@@ -103,13 +110,17 @@ const StartGameScreen = () => {
         setNumber('')
     }
 
+    const onHandleStartGame = () =>{
+        onStartGame(selectedNumber)
+    }
+
     const confirmedOutput = () => confirmed && (
         <Card style={styles.summaryContainer}>
             <Text style= {styles.summaryText}>Chosen</Text>
             <NumberContainer>{selectedNumber}</NumberContainer>
             <Button
-                title="Syart game"
-                onPress={() => null}
+                title="Start game"
+                onPress={onHandleStartGame}
                 color={colors.primary}
             />
         </Card>
