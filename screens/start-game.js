@@ -1,4 +1,4 @@
-import { Button, Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Button, Dimensions, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
 import Card from "../components/card";
 import Input from '../components/input'
@@ -7,12 +7,17 @@ import React  from "react";
 import {colors} from '../constants/colors';
 import { useState } from "react";
 
+const {height, width}= Dimensions.get('window')
+
 const styles= StyleSheet.create ({
     container: {
         flex: 1,
         alignItems: 'center',
         fontFamily:'oswaldBold',
         marginVertical: 10,
+    },
+    containerScroll: {
+        flex: 1,
     },
 
     title: {
@@ -23,7 +28,7 @@ const styles= StyleSheet.create ({
     },
     
     inputContainer: {
-        width:'80%',
+        width: width *0.8,
         height:200,
         justifyContent: "center",
         alignItems:"center",
@@ -35,7 +40,7 @@ const styles= StyleSheet.create ({
     },
     
     textLabel: {
-        width: '100%',
+        width: width,
         textAlign: "center",
         marginVertical: 10,
         color: colors.text,
@@ -44,7 +49,7 @@ const styles= StyleSheet.create ({
     },
    
     textInput: {
-        width: '80%',
+        width: width * 0.5,
         textAlign: "center",
         marginVertical: 10,
         color: colors.text,
@@ -58,14 +63,14 @@ const styles= StyleSheet.create ({
     buttonContainer: {
         marginHorizontal:20,
         flexDirection: 'row',
-        width: '80%',
+        width: width * 0.8,
         justifyContent: "space-around",
         marginTop: 10,
         fontFamily:'oswaldBold',
         
     },
     summaryContainer: {
-        width: '70%',
+        width: width * 0.7,
         marginHorizontal:5,
         marginTop:5,
         paddingVertical: 20,
@@ -126,30 +131,34 @@ const StartGameScreen = ({onStartGame}) => {
         </Card>
     )
     return(
+        <KeyboardAvoidingView style= {styles.containerScroll} behavior={Platform.OS==='android' ? 'padding' : 'position'} keyboardVerticalOffset={30}>
         <TouchableWithoutFeedback onPress={()=> Keyboard.dismiss}>
-            <View style={styles.container}>
-                <Text style={styles.title}>Start Game</Text>
-                <Card style={styles.inputContainer}>
-                    <Text style={styles.textLabel}>Chose a number</Text>
-                    <Input 
-                        style={styles.textInput} 
-                        keyboardType='numeric'  
-                        maxLength={2}
-                        blurOnSubmit
-                        autoCapitalize='none'
-                        autoCorrect={false}
-                        onChangeText={(text) => onHandleChangeText(text)}
-                        value={number}
-                    />
-                
-                    <View style= {styles.buttonContainer}>
-                        <Button title= 'Limpiar' onPress={onReset} color= {colors.secundary}/>
-                        <Button title= 'Confirmar' onPress={onConfirm} color= {colors.primary}/>
-                    </View>
-                </Card>
-                {confirmedOutput()}
-            </View>
+            <ScrollView style= {styles.containerScroll}>
+                <View style={styles.container}>
+                    <Text style={styles.title}>Start Game</Text>
+                    <Card style={styles.inputContainer}>
+                        <Text style={styles.textLabel}>Chose a number</Text>
+                        <Input 
+                            style={styles.textInput} 
+                            keyboardType='numeric'  
+                            maxLength={2}
+                            blurOnSubmit
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            onChangeText={(text) => onHandleChangeText(text)}
+                            value={number}
+                        />
+                    
+                        <View style= {styles.buttonContainer}>
+                            <Button title= 'Limpiar' onPress={onReset} color= {colors.secundary}/>
+                            <Button title= 'Confirmar' onPress={onConfirm} color= {colors.primary}/>
+                        </View>
+                    </Card>
+                    {confirmedOutput()}
+                </View>
+            </ScrollView>
         </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 

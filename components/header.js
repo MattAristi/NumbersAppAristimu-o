@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
 
 import React from "react";
 import {colors} from '../constants/colors';
 
 const styles= StyleSheet.create ({
     header:{
-        height: 100,
+        height: 70,
         alignItems: 'center',
         justifyContent:'center',
         backgroundColor: colors.primary,
-        paddingTop: 20,
+        marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     title: {
         fontSize: 22,

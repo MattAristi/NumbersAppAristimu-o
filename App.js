@@ -1,6 +1,7 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React, {useState} from 'react';
 
+import GameOver from './screens/gameOver';
 import GameScreen from './screens/game';
 import  Header  from './components/header';
 import StartGameScreen from './screens/start-game';
@@ -23,16 +24,24 @@ const styles = StyleSheet.create({
 
 export default function App() {
   const [userNumber,setUserNumber]= useState(0)
+  const [rounds, setRounds]=useState(0)
   const [loaded]=useFonts({
     'oswaldBold':require('./assets/fonts/Oswald-Bold.ttf'),
     oswaldLight: require('./assets/fonts/Oswald-Light.ttf'),
     oswaldMedium: require('./assets/fonts/Oswald-Medium.ttf'),
     oswaldRegular: require('./assets/fonts/Oswald-Regular.ttf'),
   })
-  const title = !userNumber? 'Guess number': 'Game on'
+  const title = !userNumber? 'Guess number': 'Game'
 
   const onStartGame= (selectedNumber) => {
     setUserNumber(selectedNumber)
+  }
+  const onGameOver = (roundsNumber) => {
+    setRounds(roundsNumber)
+  }
+  const onRestartGame= () => {
+    setUserNumber(0)
+    setRounds(0)
   }
 
   if (!loaded) {
@@ -44,14 +53,16 @@ export default function App() {
   }
   let content = <StartGameScreen onStartGame={onStartGame}/>
 
-  if (userNumber) {
-    content= <GameScreen selectedNumber={userNumber}/>
+  if (userNumber && rounds<=0) {
+    content= <GameScreen selectedNumber={userNumber} onGameOver={onGameOver}/>
+  }else if(rounds>0){
+    content= <GameOver roundsNumber={rounds} userNumber={userNumber} onRestartGame={onRestartGame} ></GameOver>
   }
   return (
-    <View style={styles.container}>
-      <Header title= 'Guess your number'></Header>
+    <SafeAreaView style={styles.container}>
+      <Header title = {rounds === 0 ? title: 'Game over'}></Header>
       {content}
-    </View>
+    </SafeAreaView>
   );
 }
 
